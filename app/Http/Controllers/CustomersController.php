@@ -1,18 +1,19 @@
 <?php
 namespace App\Http\Controllers;
+use App\Company;
 use App\Customer;
 use Illuminate\Http\Request;
-use App\Company;
-
 class CustomersController extends Controller
 {
-    public function list()
+    public function index()
     {
-        $activeCustomers = Customer::active()->get();
-        $inactiveCustomers = Customer::inactive()->get();
+        $customers = Customer::all();
+        return view('customers.index', compact('customers'));
+    }
+    public function create()
+    {
         $companies = Company::all();
-
-        return view('internals.customers', compact('activeCustomers', 'inactiveCustomers', 'companies'));
+        return view('customers.create', compact('companies'));
     }
     public function store()
     {
@@ -23,6 +24,26 @@ class CustomersController extends Controller
             'company_id' => 'required',
         ]);
         Customer::create($data);
-        return back();
+        return redirect('customers');
+    }
+    public function show(Customer $customer)
+    {
+        return view('customers.show', compact('customer'));
+    }
+    public function edit(Customer $customer)
+    {
+        $companies = Company::all();
+        return view('customers.edit', compact('customer', 'companies'));
+    }
+    public function update(Customer $customer)
+    {
+        $data = request()->validate([
+            'name' => 'required|min:3',
+            'email' => 'required|email',
+            'active' => 'required',
+            'company_id' => 'required',
+        ]);
+        $customer->update($data);
+        return redirect('customers/' . $customer->id);
     }
 }
