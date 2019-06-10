@@ -1,21 +1,18 @@
 <?php
 namespace App;
 use Illuminate\Database\Eloquent\Model;
-use App\Company;
-
 class Customer extends Model
 {
     // Fillable Example
     // protected $fillable = ['name', 'email', 'active'];
     // Guarded Example
     protected $guarded = [];
-
+    protected $attributes = [
+        'active' => 1
+    ];
     public function getActiveAttribute($attribute)
     {
-        return [
-            0 => 'Inactive',
-            1 => 'Active',
-        ][$attribute];
+        return $this->activeOptions()[$attribute];
     }
 
     public function scopeActive($query)
@@ -26,7 +23,16 @@ class Customer extends Model
     {
         return $query->where('active', 0);
     }
-    public function company(){
+    public function company()
+    {
         return $this->belongsTo(Company::class);
+    }
+    public function activeOptions()
+    {
+        return [
+            1 => 'Active',
+            0 => 'Inactive',
+            2 => 'In-Progress'
+        ];
     }
 }
