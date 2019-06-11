@@ -11,12 +11,12 @@
 |
 */
 
-Route::view('/', 'home');
-Route::get('contact', 'ContactFormController@create');
-Route::post('contact', 'ContactFormController@store');
+Route::view('/', 'home')->name('index');
+Route::get('contact', 'ContactFormController@create')->name('contact.create');
+Route::post('contact', 'ContactFormController@store')->name('contact.store');
 
 
-Route::view('about', 'about');
+Route::view('about', 'about')->name('about');
 
 //Route::get('customers', 'CustomersController@index');
 //Route::get('customers/create', 'CustomersController@create');
